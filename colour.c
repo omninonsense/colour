@@ -21,10 +21,10 @@ colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
 colour_t colour_css(const char* css)
 {
   const char *c = css;
-  const char *p;
-  int i = 0;
+  // const char *p;
+  // int i = 0;
   size_t len;
-  uint32_t colour_int = 0;
+  // uint8_t colour_int = 0;
   colour_t colour;
 
   // Check if valid CSS color (must begin with `#`)
@@ -43,23 +43,27 @@ colour_t colour_css(const char* css)
     goto invalid_colour;
   }
 
-  p = c + len;
-  while ((--p) >= c) {
-    int x = _base16c_to_byte(*p);
 
-    if (x == -1) {
-      goto invalid_colour;
-    }
-    else {
-      colour_int += (x << (4*(i++)));
-      if (len == 3) /* Apply same value to next magnitude order */
-        colour_int += (x << (4*(i++)));
-    }
+  if (len == 6) {
+    colour.red    = _base16c_to_byte(*c++) * 16;
+    colour.red   += _base16c_to_byte(*c++);
+
+    colour.green  = _base16c_to_byte(*c++) * 16;
+    colour.green += _base16c_to_byte(*c++);
+
+    colour.blue   = _base16c_to_byte(*c++) * 16;
+    colour.blue  += _base16c_to_byte(*c++);
+
+  } else {
+    colour.red   =  _base16c_to_byte(*c++) * 16;
+    colour.green =  _base16c_to_byte(*c++) * 16;
+    colour.blue  =  _base16c_to_byte(*c++) * 16;
+
+    // Copy the bytes to their lower magnitude
+    colour.red   += colour.red >> 4;
+    colour.green += colour.green >> 4;
+    colour.blue  += colour.blue >> 4;
   }
-
-  colour.red   = ((colour_int >> 16) & 0xff);
-  colour.green = ((colour_int >>  8) & 0xff);
-  colour.blue  = ( colour_int        & 0xff);
 
   return colour;
 

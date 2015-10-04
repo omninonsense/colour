@@ -2,7 +2,7 @@ all: build
 
 build_dir = ./build
 CFLAGS = -lm -I../include
-CXX=avr-gcc
+CXX=gcc
 STD=c11
 
 prepare: dir_structure colour.c.o
