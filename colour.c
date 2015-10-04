@@ -35,7 +35,6 @@ colour_t colour_css(const char* css)
 
     colour.blue   = _base16c_to_byte(*(css+5)) * 16;
     colour.blue  += _base16c_to_byte(*(css+6));
-
   } else if (len == 4) {
     colour.red   =  _base16c_to_byte(*(css+1)) * 16;
     colour.green =  _base16c_to_byte(*(css+2)) * 16;
