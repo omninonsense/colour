@@ -69,7 +69,7 @@ colour_t colour_hsl(colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
   colour_decimal_t p;
   colour_decimal_t q;
 
-  h /= 360.0;
+  h = _wrap_around(h, 360.0) / 360.0;
   s /= 100.0;
   l /= 100.0;
 
@@ -157,4 +157,16 @@ colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_deci
   if (t*2.0 < 1) return q;
   if (t*3.0 < 2) return p + (q - p) * (2.0/3.0 - t)*6;
   return p;
+}
+
+colour_decimal_t _wrap_around(colour_decimal_t val, colour_decimal_t mod)
+{
+  if (val == 0 || mod == 0 || -val == mod)
+    return 0;
+
+  if (val < 0) {
+    return mod + fmod(val, mod);
+  } else {
+    return fmod(val, mod);
+  }
 }

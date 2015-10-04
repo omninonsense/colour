@@ -66,4 +66,5 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
 // Helper Functions
 uint8_t _base16c_to_byte(char c);
 colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_decimal_t t);
+colour_decimal_t _wrap_around(colour_decimal_t val, colour_decimal_t mod);
 #endif
