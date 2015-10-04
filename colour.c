@@ -27,18 +27,13 @@ colour_t colour_css(const char* css)
    */
   len = strlen(css);
   if (len == 7) {
-    colour.red    = _base16c_to_byte(*(css+1)) * 16;
-    colour.red   += _base16c_to_byte(*(css+2));
-
-    colour.green  = _base16c_to_byte(*(css+3)) * 16;
-    colour.green += _base16c_to_byte(*(css+4));
-
-    colour.blue   = _base16c_to_byte(*(css+5)) * 16;
-    colour.blue  += _base16c_to_byte(*(css+6));
+    colour.red   = _hex_to_int(*(css+1)) * 16 + _hex_to_int(*(css+2));
+    colour.green = _hex_to_int(*(css+3)) * 16 + _hex_to_int(*(css+4));
+    colour.blue  = _hex_to_int(*(css+5)) * 16 + _hex_to_int(*(css+6));
   } else if (len == 4) {
-    colour.red   =  _base16c_to_byte(*(css+1)) * 16;
-    colour.green =  _base16c_to_byte(*(css+2)) * 16;
-    colour.blue  =  _base16c_to_byte(*(css+3)) * 16;
+    colour.red   =  _hex_to_int(*(css+1)) * 16;
+    colour.green =  _hex_to_int(*(css+2)) * 16;
+    colour.blue  =  _hex_to_int(*(css+3)) * 16;
 
     // Copy the bytes to their lower magnitude
     colour.red   += colour.red >> 4;
@@ -130,7 +125,7 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
 
 /* Helper functions */
 /* Converts a Base 16 character to an integer */
-uint8_t _base16c_to_byte(char c)
+uint8_t _hex_to_int(char c)
 {
   if (c >= '0' && c <= '9') return c - '0';
   if (c >= 'A' && c <= 'F') return c - 'A' + 10;
