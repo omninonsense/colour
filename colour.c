@@ -26,11 +26,6 @@ colour_t colour_css(const char* css)
    * expanded to `#RRGGBB`.
    */
   len = strlen(css);
-  if (len != 4 && len != 7) {
-    goto invalid_colour;
-  }
-
-
   if (len == 7) {
     colour.red    = _base16c_to_byte(*(css+1)) * 16;
     colour.red   += _base16c_to_byte(*(css+2));
@@ -41,7 +36,7 @@ colour_t colour_css(const char* css)
     colour.blue   = _base16c_to_byte(*(css+5)) * 16;
     colour.blue  += _base16c_to_byte(*(css+6));
 
-  } else {
+  } else if (len == 4) {
     colour.red   =  _base16c_to_byte(*(css+1)) * 16;
     colour.green =  _base16c_to_byte(*(css+2)) * 16;
     colour.blue  =  _base16c_to_byte(*(css+3)) * 16;
@@ -50,7 +45,7 @@ colour_t colour_css(const char* css)
     colour.red   += colour.red >> 4;
     colour.green += colour.green >> 4;
     colour.blue  += colour.blue >> 4;
-  }
+  } else goto invalid_colour;
 
   return colour;
 
