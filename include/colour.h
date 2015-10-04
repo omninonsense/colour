@@ -27,7 +27,6 @@
 #include <inttypes.h>
 #include <math.h>
 #include <string.h>
-#include <errno.h>
 
 #define COLOUR_WHITE colour_rgb(255,255,255)
 #define COLOUR_BLACK colour_rgb(0,0,0)

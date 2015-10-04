@@ -11,20 +11,10 @@ colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
   return colour;
 }
 
-/**
- * Creates a colour from a CSS colour string
- * If for any reason the colour is invalid, it will return a black colour and
- * set errno to `EINVAL`.
- *
- * It's up to the library user to detect the error
- */
 colour_t colour_css(const char* css)
 {
   const char *c = css;
-  // const char *p;
-  // int i = 0;
   size_t len;
-  // uint8_t colour_int = 0;
   colour_t colour;
 
   // Check if valid CSS color (must begin with `#`)
@@ -68,7 +58,6 @@ colour_t colour_css(const char* css)
   return colour;
 
 invalid_colour:
-  errno = EINVAL;
   return COLOUR_EMPTY;
 }
 
