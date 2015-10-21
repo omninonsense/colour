@@ -25,7 +25,6 @@
 #ifndef __COLOUR_H__
 #define __COLOUR_H__
 #include <inttypes.h>
-#include <string.h>
 
 #define COLOUR_WHITE colour_rgb(255,255,255)
 #define COLOUR_BLACK colour_rgb(0,0,0)

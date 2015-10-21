@@ -13,7 +13,6 @@ colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
 
 colour_t colour_css(const char* css)
 {
-  size_t len;
   colour_t colour;
 
   // Check if valid CSS color (must begin with `#`)
@@ -25,12 +24,11 @@ colour_t colour_css(const char* css)
    * CSS colours can either be `#RRGGBB` or the shorthand version `#RGB` which
    * expanded to `#RRGGBB`.
    */
-  len = strlen(css);
-  if (len == 7) {
+  if (css[7] == 0) {
     colour.red   = _hex_to_int(*(css+1)) * 16 + _hex_to_int(*(css+2));
     colour.green = _hex_to_int(*(css+3)) * 16 + _hex_to_int(*(css+4));
     colour.blue  = _hex_to_int(*(css+5)) * 16 + _hex_to_int(*(css+6));
-  } else if (len == 4) {
+  } else if (css[4] == 0) {
     colour.red   =  _hex_to_int(*(css+1)) * 16;
     colour.green =  _hex_to_int(*(css+2)) * 16;
     colour.blue  =  _hex_to_int(*(css+3)) * 16;
