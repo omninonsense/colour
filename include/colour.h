@@ -25,7 +25,6 @@
 #ifndef __COLOUR_H__
 #define __COLOUR_H__
 #include <inttypes.h>
-#include <math.h>
 #include <string.h>
 
 #define COLOUR_WHITE colour_rgb(255,255,255)
@@ -41,6 +40,10 @@
 
 #ifndef COLOUR_EMPTY
 #define COLOUR_EMPTY COLOUR_BLACK
+#endif
+
+#ifndef COLOUR_ROUND
+#define COLOUR_ROUND(num) ((int)((num) < 0 ? (num) - 0.5 : (num) + 0.5))
 #endif
 
 /* Provide a certain level of type consistency */
@@ -66,5 +69,4 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
 // Helper Functions
 uint8_t _hex_to_int(char c);
 colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_decimal_t t);
-colour_decimal_t _wrap_around(colour_decimal_t val, colour_decimal_t mod);
 #endif

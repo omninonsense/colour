@@ -55,7 +55,7 @@ colour_t colour_hsl(colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
   colour_decimal_t p;
   colour_decimal_t q;
 
-  h = _wrap_around(h, 360.0) / 360.0;
+  h /= 360.0;
   s /= 100.0;
   l /= 100.0;
 
@@ -70,9 +70,9 @@ colour_t colour_hsl(colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
   else q = (l+s)-(l*s);
   p = (l*2.0)-q;
 
-  colour.red   = round(_hue_to_rgb(p, q, h + 1.0/3.0) * 255.0);
-  colour.green = round(_hue_to_rgb(p, q, h          ) * 255.0);
-  colour.blue  = round(_hue_to_rgb(p, q, h - 1.0/3.0) * 255.0);
+  colour.red   = COLOUR_ROUND(_hue_to_rgb(p, q, h + 1.0/3.0) * 255.0);
+  colour.green = COLOUR_ROUND(_hue_to_rgb(p, q, h          ) * 255.0);
+  colour.blue  = COLOUR_ROUND(_hue_to_rgb(p, q, h - 1.0/3.0) * 255.0);
 
   return colour;
 }
@@ -115,9 +115,9 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
   colour_t colour;
   colour_decimal_t p = weight / 100.0;
 
-  colour.red   = floor(colour1.red   * p + colour2.red   * (1.0-p));
-  colour.green = floor(colour1.green * p + colour2.green * (1.0-p));
-  colour.blue  = floor(colour1.blue  * p + colour2.blue  * (1.0-p));
+  colour.red   = colour1.red   * p + colour2.red   * (1.0-p);
+  colour.green = colour1.green * p + colour2.green * (1.0-p);
+  colour.blue  = colour1.blue  * p + colour2.blue  * (1.0-p);
 
   return colour;
 }
@@ -143,16 +143,4 @@ colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_deci
   if (t*2.0 < 1) return q;
   if (t*3.0 < 2) return p + (q - p) * (2.0/3.0 - t)*6;
   return p;
-}
-
-colour_decimal_t _wrap_around(colour_decimal_t val, colour_decimal_t mod)
-{
-  if (val == 0 || mod == 0 || -val == mod)
-    return 0;
-
-  if (val < 0) {
-    return mod + fmod(val, mod);
-  } else {
-    return fmod(val, mod);
-  }
 }
