@@ -113,6 +113,9 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
   colour_t colour;
   colour_decimal_t p = weight / 100.0;
 
+  if (p < 0.0) p = 0.0;
+  if (p > 1.0) p = 1.0;
+
   colour.red   = colour1.red   * p + colour2.red   * (1.0-p);
   colour.green = colour1.green * p + colour2.green * (1.0-p);
   colour.blue  = colour1.blue  * p + colour2.blue  * (1.0-p);
@@ -120,6 +123,47 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
   return colour;
 }
 
+colour_matrix_t colour_matrix_new(int c, int r, colour_t* m)
+{
+  colour_matrix_t cm;
+  cm.columns = c;
+  cm.rows    = r;
+  cm.matrix  = m;
+
+  return cm;
+}
+
+void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
+{
+  if (x < 0 || y < 0) return;
+  if (x >= self.columns || y >= self.rows) return;
+
+  self.matrix[_cm_addr(x, y, self.columns)] = c;
+}
+
+colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y)
+{
+  if (x < 0 || y < 0) return COLOUR_BLACK;
+  if (x >= self.columns || y >= self.rows) return COLOUR_BLACK;
+
+  return self.matrix[_cm_addr(x, y, self.columns)];
+}
+
+void set_row(colour_matrix_t self, int row, colour_t c)
+{
+  if (row >= self.rows || row < 0)  return;
+
+  for (int i = 0; i < self.columns; i++)
+    colour_matrix_set_pixel(self, i, row, c);
+}
+
+void set_column(colour_matrix_t self, int col, colour_t c)
+{
+  if (col >= self.columns || col < 0)  return;
+
+  for (int i = 0; i < self.rows; i++)
+    colour_matrix_set_pixel(self, col, i, c);
+}
 
 /* Helper functions */
 /* Converts a Base 16 character to an integer */
@@ -141,4 +185,22 @@ colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_deci
   if (t*2.0 < 1) return q;
   if (t*3.0 < 2) return p + (q - p) * (2.0/3.0 - t)*6;
   return p;
+}
+
+int _cm_addr(int x, int y, int c)
+{
+  if (x >= c) return -1;
+  return c * y + x;
+}
+
+int _cm_x(int addr, int c) {
+  if (c <= 0) return 0;
+
+  return addr % c;
+}
+
+int _cm_y(int addr, int c) {
+  if (c <= 0) return 0;
+
+  return addr / c;
 }

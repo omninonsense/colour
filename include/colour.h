@@ -49,11 +49,17 @@
 typedef uint8_t colour_byte_t;
 typedef double  colour_decimal_t;
 
-typedef struct colour_s {
+typedef struct {
   colour_byte_t red;
   colour_byte_t green;
   colour_byte_t blue;
 } colour_t;
+
+typedef struct {
+  int    columns;
+  int    rows;
+  colour_t* matrix;
+} colour_matrix_t;
 
 colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue);
 colour_t colour_css(const char* css);
@@ -65,7 +71,17 @@ void colour_to_hsl(colour_t colour, colour_decimal_t *hue, colour_decimal_t *sat
 /* Colour functions */
 colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight);
 
+/* Colour Matrix functions */
+colour_matrix_t colour_matrix_new(int c, int r, colour_t* m);
+void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c);
+colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y);
+void set_row(colour_matrix_t self, int row, colour_t c);
+void set_column(colour_matrix_t self, int col, colour_t c);
+
 // Helper Functions
 uint8_t _hex_to_int(char c);
 colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_decimal_t t);
+int _cm_addr(int x, int y, int c);
+int _cm_x(int addr, int c);
+int _cm_y(int addr, int c);
 #endif
