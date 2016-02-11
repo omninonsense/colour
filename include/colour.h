@@ -45,6 +45,23 @@
 #define COLOUR_ROUND(num) ((int)((num) < 0 ? (num) - 0.5 : (num) + 0.5))
 #endif
 
+#define COLOUR_MATRIX_ZIGZAG     (1 <<  0)
+#define COLOUR_MATRIX_RESERVED1  (1 <<  1)
+#define COLOUR_MATRIX_RESERVED2  (1 <<  2)
+#define COLOUR_MATRIX_RESERVED3  (1 <<  3)
+#define COLOUR_MATRIX_RESERVED4  (1 <<  4)
+#define COLOUR_MATRIX_RESERVED5  (1 <<  5)
+#define COLOUR_MATRIX_RESERVED6  (1 <<  6)
+#define COLOUR_MATRIX_RESERVED7  (1 <<  7)
+#define COLOUR_MATRIX_RESERVED8  (1 <<  8)
+#define COLOUR_MATRIX_RESERVED9  (1 <<  9)
+#define COLOUR_MATRIX_RESERVED10 (1 << 10)
+#define COLOUR_MATRIX_RESERVED11 (1 << 11)
+#define COLOUR_MATRIX_RESERVED12 (1 << 12)
+#define COLOUR_MATRIX_RESERVED13 (1 << 13)
+#define COLOUR_MATRIX_RESERVED14 (1 << 14)
+#define COLOUR_MATRIX_RESERVED15 (1 << 15)
+
 /* Provide a certain level of type consistency */
 typedef uint8_t colour_byte_t;
 typedef double  colour_decimal_t;
@@ -58,6 +75,7 @@ typedef struct {
 typedef struct {
   int    columns;
   int    rows;
+  uint16_t flags;
   colour_t* matrix;
 } colour_matrix_t;
 
@@ -72,7 +90,7 @@ void colour_to_hsl(colour_t colour, colour_decimal_t *hue, colour_decimal_t *sat
 colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight);
 
 /* Colour Matrix functions */
-colour_matrix_t colour_matrix_new(int c, int r, colour_t* m);
+colour_matrix_t colour_matrix_new(int c, int r, uint16_t f, colour_t* m);
 void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c);
 colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y);
 void set_row(colour_matrix_t self, int row, colour_t c);

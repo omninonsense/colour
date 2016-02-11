@@ -13,12 +13,11 @@ colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
 
 colour_t colour_css(const char* css)
 {
-  colour_t colour;
+  colour_t colour = COLOUR_EMPTY;
 
   // Check if valid CSS color (must begin with `#`)
-  if (*css != '#')
-    goto invalid_colour;
-
+  if (css[0] != '#')
+    return colour;
 
   /**
    * CSS colours can either be `#RRGGBB` or the shorthand version `#RGB` which
@@ -37,12 +36,9 @@ colour_t colour_css(const char* css)
     colour.red   += colour.red >> 4;
     colour.green += colour.green >> 4;
     colour.blue  += colour.blue >> 4;
-  } else goto invalid_colour;
+  }
 
   return colour;
-
-invalid_colour:
-  return COLOUR_EMPTY;
 }
 
 /* Creates a colour from HSL values */
@@ -123,12 +119,13 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
   return colour;
 }
 
-colour_matrix_t colour_matrix_new(int c, int r, colour_t* m)
+colour_matrix_t colour_matrix_new(int c, int r, uint16_t f, colour_t* m)
 {
   colour_matrix_t cm;
   cm.columns = c;
   cm.rows    = r;
   cm.matrix  = m;
+  cm.flags   = f;
 
   return cm;
 }
@@ -138,6 +135,9 @@ void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
   if (x < 0 || y < 0) return;
   if (x >= self.columns || y >= self.rows) return;
 
+  if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
+    x = self.columns - x;
+
   self.matrix[_cm_addr(x, y, self.columns)] = c;
 }
 
@@ -145,6 +145,9 @@ colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y)
 {
   if (x < 0 || y < 0) return COLOUR_BLACK;
   if (x >= self.columns || y >= self.rows) return COLOUR_BLACK;
+
+  if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
+    x = self.columns - x;
 
   return self.matrix[_cm_addr(x, y, self.columns)];
 }
