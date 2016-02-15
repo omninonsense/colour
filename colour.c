@@ -136,7 +136,7 @@ void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
   if (x >= self.columns || y >= self.rows) return;
 
   if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
-    x = self.columns - x;
+    x = self.columns - x - 1;
 
   self.matrix[_cm_addr(x, y, self.columns)] = c;
 }
@@ -147,7 +147,7 @@ colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y)
   if (x >= self.columns || y >= self.rows) return COLOUR_BLACK;
 
   if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
-    x = self.columns - x;
+    x = self.columns - x - 1;
 
   return self.matrix[_cm_addr(x, y, self.columns)];
 }
