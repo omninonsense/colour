@@ -135,7 +135,10 @@ void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
   if (x < 0 || y < 0) return;
   if (x >= self.columns || y >= self.rows) return;
 
-  if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
+  if (self.flags & COLOUR_MATRIX_ZIGZAG_ODD && y % 2 != 0)
+    x = self.columns - x - 1;
+
+  if (self.flags & COLOUR_MATRIX_ZIGZAG_EVEN && y % 2 == 0)
     x = self.columns - x - 1;
 
   self.matrix[_cm_addr(x, y, self.columns)] = c;

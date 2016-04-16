@@ -45,22 +45,8 @@
 #define COLOUR_ROUND(num) ((int)((num) < 0 ? (num) - 0.5 : (num) + 0.5))
 #endif
 
-#define COLOUR_MATRIX_ZIGZAG     (1 <<  0)
-#define COLOUR_MATRIX_RESERVED1  (1 <<  1)
-#define COLOUR_MATRIX_RESERVED2  (1 <<  2)
-#define COLOUR_MATRIX_RESERVED3  (1 <<  3)
-#define COLOUR_MATRIX_RESERVED4  (1 <<  4)
-#define COLOUR_MATRIX_RESERVED5  (1 <<  5)
-#define COLOUR_MATRIX_RESERVED6  (1 <<  6)
-#define COLOUR_MATRIX_RESERVED7  (1 <<  7)
-#define COLOUR_MATRIX_RESERVED8  (1 <<  8)
-#define COLOUR_MATRIX_RESERVED9  (1 <<  9)
-#define COLOUR_MATRIX_RESERVED10 (1 << 10)
-#define COLOUR_MATRIX_RESERVED11 (1 << 11)
-#define COLOUR_MATRIX_RESERVED12 (1 << 12)
-#define COLOUR_MATRIX_RESERVED13 (1 << 13)
-#define COLOUR_MATRIX_RESERVED14 (1 << 14)
-#define COLOUR_MATRIX_RESERVED15 (1 << 15)
+#define COLOUR_MATRIX_ZIGZAG_ODD          (1 <<  0)
+#define COLOUR_MATRIX_ZIGZAG_EVEN (1 <<  1)
 
 /* Provide a certain level of type consistency */
 typedef uint8_t colour_byte_t;
