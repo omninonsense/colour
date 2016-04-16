@@ -48,43 +48,39 @@
 #define COLOUR_MATRIX_ZIGZAG_ODD          (1 <<  0)
 #define COLOUR_MATRIX_ZIGZAG_EVEN (1 <<  1)
 
-/* Provide a certain level of type consistency */
-typedef uint8_t colour_byte_t;
-typedef double  colour_decimal_t;
-
 typedef struct {
-  colour_byte_t red;
-  colour_byte_t green;
-  colour_byte_t blue;
-} colour_t;
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+} Colour;
 
 typedef struct {
   int    columns;
   int    rows;
   uint16_t flags;
-  colour_t* matrix;
-} colour_matrix_t;
+  Colour* matrix;
+} ColourMatrix;
 
-colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue);
-colour_t colour_css(const char* css);
-colour_t colour_hsl(colour_decimal_t hue, colour_decimal_t saturation, colour_decimal_t lightness);
+Colour colour_rgb(uint8_t red, uint8_t green, uint8_t blue);
+Colour colour_css(const char* css);
+Colour colour_hsl(double hue, double saturation, double lightness);
 
 /* Conversion functions */
-void colour_to_hsl(colour_t colour, colour_decimal_t *hue, colour_decimal_t *saturation, colour_decimal_t *lightness);
+void Colouro_hsl(Colour colour, double *hue, double *saturation, double *lightness);
 
 /* Colour functions */
-colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight);
+Colour colour_mix(Colour colour1, Colour colour2, double weight);
 
 /* Colour Matrix functions */
-colour_matrix_t colour_matrix_new(int c, int r, uint16_t f, colour_t* m);
-void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c);
-colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y);
-void set_row(colour_matrix_t self, int row, colour_t c);
-void set_column(colour_matrix_t self, int col, colour_t c);
+ColourMatrix colour_matrix_new(int c, int r, uint16_t f, Colour* m);
+void colour_matrix_set_pixel(ColourMatrix self, int x, int y, Colour c);
+Colour colour_matrix_get_pixel(ColourMatrix self, int x, int y);
+void colour_matrix_set_row(ColourMatrix self, int row, Colour c);
+void colour_matrix_set_column(ColourMatrix self, int col, Colour c);
 
 // Helper Functions
 uint8_t _hex_to_int(char c);
-colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_decimal_t t);
+double _hue_to_rgb(double p, double q, double t);
 int _cm_addr(int x, int y, int c);
 int _cm_x(int addr, int c);
 int _cm_y(int addr, int c);

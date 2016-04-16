@@ -1,9 +1,9 @@
 #include "colour.h"
 
 /* Creates a colour from RGB values */
-colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
+Colour colour_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
-  colour_t colour;
+  Colour colour;
   colour.red   = red;
   colour.green = green;
   colour.blue  = blue;
@@ -11,9 +11,9 @@ colour_t colour_rgb(colour_byte_t red, colour_byte_t green, colour_byte_t blue)
   return colour;
 }
 
-colour_t colour_css(const char* css)
+Colour colour_css(const char* css)
 {
-  colour_t colour = COLOUR_EMPTY;
+  Colour colour = COLOUR_EMPTY;
 
   // Check if valid CSS color (must begin with `#`)
   if (css[0] != '#')
@@ -42,12 +42,12 @@ colour_t colour_css(const char* css)
 }
 
 /* Creates a colour from HSL values */
-colour_t colour_hsl(colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
+Colour colour_hsl(double h, double s, double l)
 {
-  colour_t colour = COLOUR_EMPTY;
+  Colour colour = COLOUR_EMPTY;
 
-  colour_decimal_t p;
-  colour_decimal_t q;
+  double p;
+  double q;
 
   h /= 360.0;
   s /= 100.0;
@@ -72,7 +72,7 @@ colour_t colour_hsl(colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
 }
 
 /* Extract HSL values from a colour */
-void colour_to_hsl(colour_t colour, colour_decimal_t *hue, colour_decimal_t *saturation, colour_decimal_t *lightness)
+void Colouro_hsl(Colour colour, double *hue, double *saturation, double *lightness)
 {
 
   double r = colour.red / 255.0;
@@ -103,11 +103,11 @@ void colour_to_hsl(colour_t colour, colour_decimal_t *hue, colour_decimal_t *sat
   *lightness  = l * 100;
 }
 
-colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
+Colour colour_mix(Colour colour1, Colour colour2, double weight)
 {
 
-  colour_t colour;
-  colour_decimal_t p = weight / 100.0;
+  Colour colour;
+  double p = weight / 100.0;
 
   if (p < 0.0) p = 0.0;
   if (p > 1.0) p = 1.0;
@@ -119,9 +119,9 @@ colour_t colour_mix(colour_t colour1, colour_t colour2, colour_decimal_t weight)
   return colour;
 }
 
-colour_matrix_t colour_matrix_new(int c, int r, uint16_t f, colour_t* m)
+ColourMatrix colour_matrix_new(int c, int r, uint16_t f, Colour* m)
 {
-  colour_matrix_t cm;
+  ColourMatrix cm;
   cm.columns = c;
   cm.rows    = r;
   cm.matrix  = m;
@@ -130,7 +130,7 @@ colour_matrix_t colour_matrix_new(int c, int r, uint16_t f, colour_t* m)
   return cm;
 }
 
-void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
+void colour_matrix_set_pixel(ColourMatrix self, int x, int y, Colour c)
 {
   if (x < 0 || y < 0) return;
   if (x >= self.columns || y >= self.rows) return;
@@ -144,18 +144,21 @@ void colour_matrix_set_pixel(colour_matrix_t self, int x, int y, colour_t c)
   self.matrix[_cm_addr(x, y, self.columns)] = c;
 }
 
-colour_t colour_matrix_get_pixel(colour_matrix_t self, int x, int y)
+Colour colour_matrix_get_pixel(ColourMatrix self, int x, int y)
 {
   if (x < 0 || y < 0) return COLOUR_BLACK;
   if (x >= self.columns || y >= self.rows) return COLOUR_BLACK;
 
-  if (self.flags & COLOUR_MATRIX_ZIGZAG && y % 2)
+  if (self.flags & COLOUR_MATRIX_ZIGZAG_ODD && y % 2 != 0)
+    x = self.columns - x - 1;
+
+  if (self.flags & COLOUR_MATRIX_ZIGZAG_EVEN && y % 2 == 0)
     x = self.columns - x - 1;
 
   return self.matrix[_cm_addr(x, y, self.columns)];
 }
 
-void set_row(colour_matrix_t self, int row, colour_t c)
+void colour_matrix_set_row(ColourMatrix self, int row, Colour c)
 {
   if (row >= self.rows || row < 0)  return;
 
@@ -163,7 +166,7 @@ void set_row(colour_matrix_t self, int row, colour_t c)
     colour_matrix_set_pixel(self, i, row, c);
 }
 
-void set_column(colour_matrix_t self, int col, colour_t c)
+void colour_matrix_set_column(ColourMatrix self, int col, Colour c)
 {
   if (col >= self.columns || col < 0)  return;
 
@@ -183,7 +186,7 @@ uint8_t _hex_to_int(char c)
 }
 
 /* Extract the R, G or B components from the hue */
-colour_decimal_t _hue_to_rgb(colour_decimal_t p, colour_decimal_t q, colour_decimal_t t)
+double _hue_to_rgb(double p, double q, double t)
 {
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
