@@ -16,7 +16,7 @@
 
 #endif
 
-int assert_rgb(colour_t c, colour_byte_t r, colour_byte_t g, colour_byte_t b)
+int assert_rgb(Colour c, uint8_t r, uint8_t g, uint8_t b)
 {
   if (c.red == r && c.green == g && c.blue == b) {
     return 1;
@@ -28,17 +28,17 @@ int assert_rgb(colour_t c, colour_byte_t r, colour_byte_t g, colour_byte_t b)
   return 0;
 }
 
-char* colour_to_css(colour_t c, char* s) // s must be at least `char[8]`
+char* Colouro_css(Colour c, char* s) // s must be at least `char[8]`
 {
   sprintf(s, "#%02x%02x%02x", c.red, c.green, c.blue);
   return s;
 }
 
-int assert_hsl(colour_t c, colour_decimal_t h, colour_decimal_t s, colour_decimal_t l)
+int assert_hsl(Colour c, double h, double s, double l)
 {
 
-  colour_decimal_t hue, saturation, lightness;
-  colour_to_hsl(c, &hue, &saturation, &lightness);
+  double hue, saturation, lightness;
+  Colouro_hsl(c, &hue, &saturation, &lightness);
 
   hue        = COLOUR_ROUND(hue);
   saturation = COLOUR_ROUND(saturation);

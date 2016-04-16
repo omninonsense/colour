@@ -5,7 +5,7 @@
 
 int main(int argc, char const *argv[]) {
 
-  colour_t violet = colour_css("#7F00FF");
+  Colour violet = colour_css("#7F00FF");
 
   if (assert_hsl(violet, 270, 100, 50)) {
     #ifndef __AVR__
