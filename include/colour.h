@@ -45,7 +45,7 @@
 #define COLOUR_ROUND(num) ((int)((num) < 0 ? (num) - 0.5 : (num) + 0.5))
 #endif
 
-#define COLOUR_MATRIX_ZIGZAG_ODD          (1 <<  0)
+#define COLOUR_MATRIX_ZIGZAG_ODD  (1 <<  0)
 #define COLOUR_MATRIX_ZIGZAG_EVEN (1 <<  1)
 
 typedef struct {
