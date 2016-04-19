@@ -1,19 +1,19 @@
 all: build
 
 build_dir = ./build
-CFLAGS = -lm -I include
-CXX=gcc
+CFLAGS = -lm -Iinclude/
+CC=gcc
 STD=c11
+SOVERSION=1
 
 prepare: dir_structure
-build: prepare colour.c.o
+build: prepare shared
 
-colour.c.o:
-	@echo " "
-	@echo "Compiling Colour into object file"
-	$(CXX) -DTESTBUILD -c -std=$(STD) -Wall colour.c -o $(build_dir)/colour.c.o $(CFLAGS)
+shared:
+	$(CC) -shared -Wl,-soname,libcolour.so.$(SOVERSION) -o $(build_dir)/libcolour.so -std=$(STD) $(CFLAGS) -Wall -fPIC colour.c
 
-arduino-lib: prepare
+# @TODO: Fix this.
+arduino: prepare
 	@echo " "
 	@echo "Preparing Arduino-compatible library inside "$(build_dir)"/arduino"
 	mkdir -p $(build_dir)/arduino/libcolour
