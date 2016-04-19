@@ -1,5 +1,5 @@
 BUILD_DIR = ./build
-CFLAGS = -lm -Iinclude/
+CFLAGS = -Iinclude/
 CC=gcc
 STD=c11
 SOVERSION=1
