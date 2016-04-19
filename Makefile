@@ -1,29 +1,29 @@
-all: build
-
-build_dir = ./build
+BUILD_DIR = ./build
 CFLAGS = -lm -Iinclude/
 CC=gcc
 STD=c11
 SOVERSION=1
 
-prepare: dir_structure
-build: prepare shared
+all: build
+build: shared
 
-shared:
-	$(CC) -shared -Wl,-soname,libcolour.so.$(SOVERSION) -o $(build_dir)/libcolour.so -std=$(STD) $(CFLAGS) -Wall -fPIC colour.c
+shared: prepare
+	$(CC) -shared -Wl,-soname,libcolour.so.$(SOVERSION) -o $(BUILD_DIR)/libcolour.so -std=$(STD) $(CFLAGS) -Wall -fPIC colour.c
+	@rm -f $(BUILD_DIR)/libcolour.so.$(SOVERSION)
+	@ln -s libcolour.so $(BUILD_DIR)/libcolour.so.$(SOVERSION)
 
 # @TODO: Fix this.
 arduino: prepare
 	@echo " "
-	@echo "Preparing Arduino-compatible library inside "$(build_dir)"/arduino"
-	mkdir -p $(build_dir)/arduino/libcolour
-	cp include/colour.h $(build_dir)/arduino/libcolour/colour.h
-	cp colour.c $(build_dir)/arduino/libcolour/colour.cpp
-	cp LICENSE $(build_dir)/arduino/libcolour/LICENSE
-	cp README.md $(build_dir)/arduino/libcolour/README.md
+	@echo "Preparing Arduino-compatible library inside "$(BUILD_DIR)"/arduino"
+	mkdir -p $(BUILD_DIR)/arduino/libcolour
+	cp include/colour.h $(BUILD_DIR)/arduino/libcolour/colour.h
+	cp colour.c $(BUILD_DIR)/arduino/libcolour/colour.cpp
+	cp LICENSE $(BUILD_DIR)/arduino/libcolour/LICENSE
+	cp README.md $(BUILD_DIR)/arduino/libcolour/README.md
 
-dir_structure:
-	mkdir -p $(build_dir)
+prepare:
+	mkdir -p $(BUILD_DIR)
 
 clean:
-	rm -rf $(build_dir)/
+	rm -rf $(BUILD_DIR)/
