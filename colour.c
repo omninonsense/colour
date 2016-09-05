@@ -72,7 +72,7 @@ Colour colour_hsl(double h, double s, double l)
 }
 
 /* Extract HSL values from a colour */
-void Colouro_hsl(Colour colour, double *hue, double *saturation, double *lightness)
+void colour_to_hsl(Colour colour, double *hue, double *saturation, double *lightness)
 {
 
   double r = colour.red / 255.0;

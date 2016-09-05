@@ -66,7 +66,7 @@ Colour colour_css(const char* css);
 Colour colour_hsl(double hue, double saturation, double lightness);
 
 /* Conversion functions */
-void Colouro_hsl(Colour colour, double *hue, double *saturation, double *lightness);
+void colour_to_hsl(Colour colour, double *hue, double *saturation, double *lightness);
 
 /* Colour functions */
 Colour colour_mix(Colour colour1, Colour colour2, double weight);
