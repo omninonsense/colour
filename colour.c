@@ -119,61 +119,6 @@ Colour colour_mix(Colour colour1, Colour colour2, double weight)
   return colour;
 }
 
-ColourMatrix colour_matrix_new(int c, int r, uint16_t f, Colour* m)
-{
-  ColourMatrix cm;
-  cm.columns = c;
-  cm.rows    = r;
-  cm.matrix  = m;
-  cm.flags   = f;
-
-  return cm;
-}
-
-void colour_matrix_set_pixel(ColourMatrix self, int x, int y, Colour c)
-{
-  if (x < 0 || y < 0) return;
-  if (x >= self.columns || y >= self.rows) return;
-
-  if (self.flags & COLOUR_MATRIX_ZIGZAG_ODD && y % 2 != 0)
-    x = self.columns - x - 1;
-
-  if (self.flags & COLOUR_MATRIX_ZIGZAG_EVEN && y % 2 == 0)
-    x = self.columns - x - 1;
-
-  self.matrix[_cm_addr(x, y, self.columns)] = c;
-}
-
-Colour colour_matrix_get_pixel(ColourMatrix self, int x, int y)
-{
-  if (x < 0 || y < 0) return COLOUR_BLACK;
-  if (x >= self.columns || y >= self.rows) return COLOUR_BLACK;
-
-  if (self.flags & COLOUR_MATRIX_ZIGZAG_ODD && y % 2 != 0)
-    x = self.columns - x - 1;
-
-  if (self.flags & COLOUR_MATRIX_ZIGZAG_EVEN && y % 2 == 0)
-    x = self.columns - x - 1;
-
-  return self.matrix[_cm_addr(x, y, self.columns)];
-}
-
-void colour_matrix_set_row(ColourMatrix self, int row, Colour c)
-{
-  if (row >= self.rows || row < 0)  return;
-
-  for (int i = 0; i < self.columns; i++)
-    colour_matrix_set_pixel(self, i, row, c);
-}
-
-void colour_matrix_set_column(ColourMatrix self, int col, Colour c)
-{
-  if (col >= self.columns || col < 0)  return;
-
-  for (int i = 0; i < self.rows; i++)
-    colour_matrix_set_pixel(self, col, i, c);
-}
-
 /* Helper functions */
 /* Converts a Base 16 character to an integer */
 uint8_t _hex_to_int(char c)
@@ -194,22 +139,4 @@ double _hue_to_rgb(double p, double q, double t)
   if (t*2.0 < 1) return q;
   if (t*3.0 < 2) return p + (q - p) * (2.0/3.0 - t)*6;
   return p;
-}
-
-int _cm_addr(int x, int y, int c)
-{
-  if (x >= c) return -1;
-  return c * y + x;
-}
-
-int _cm_x(int addr, int c) {
-  if (c <= 0) return 0;
-
-  return addr % c;
-}
-
-int _cm_y(int addr, int c) {
-  if (c <= 0) return 0;
-
-  return addr / c;
 }

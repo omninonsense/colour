@@ -45,21 +45,11 @@
 #define COLOUR_ROUND(num) ((int)((num) < 0 ? (num) - 0.5 : (num) + 0.5))
 #endif
 
-#define COLOUR_MATRIX_ZIGZAG_ODD  (1 <<  0)
-#define COLOUR_MATRIX_ZIGZAG_EVEN (1 <<  1)
-
 typedef struct {
   uint8_t red;
   uint8_t green;
   uint8_t blue;
 } Colour;
-
-typedef struct {
-  int    columns;
-  int    rows;
-  uint16_t flags;
-  Colour* matrix;
-} ColourMatrix;
 
 Colour colour_rgb(uint8_t red, uint8_t green, uint8_t blue);
 Colour colour_css(const char* css);
@@ -71,17 +61,7 @@ void colour_to_hsl(Colour colour, double *hue, double *saturation, double *light
 /* Colour functions */
 Colour colour_mix(Colour colour1, Colour colour2, double weight);
 
-/* Colour Matrix functions */
-ColourMatrix colour_matrix_new(int c, int r, uint16_t f, Colour* m);
-void colour_matrix_set_pixel(ColourMatrix self, int x, int y, Colour c);
-Colour colour_matrix_get_pixel(ColourMatrix self, int x, int y);
-void colour_matrix_set_row(ColourMatrix self, int row, Colour c);
-void colour_matrix_set_column(ColourMatrix self, int col, Colour c);
-
 // Helper Functions
 uint8_t _hex_to_int(char c);
 double _hue_to_rgb(double p, double q, double t);
-int _cm_addr(int x, int y, int c);
-int _cm_x(int addr, int c);
-int _cm_y(int addr, int c);
 #endif
